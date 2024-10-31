@@ -55,7 +55,7 @@ class FileInfo
      * Set filename
      *
      * @param string $name
-     * @return Webcreate\Vcs\Common\FileInfo
+     * @return FileInfo
      */
     public function setName($name)
     {

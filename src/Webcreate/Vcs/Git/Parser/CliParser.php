@@ -50,18 +50,15 @@ class CliParser implements ParserInterface
      * (non-PHPdoc)
      * @see Webcreate\Vcs\Common\Parser.ParserInterface::parse()
      */
-    public function parse($command, array $arguments = array(), $output)
+    public function parse($command, array $arguments = array(), $output = null)
     {
         switch ($command) {
             case "log":
                 return $this->parseLogOutput($output, $arguments);
-                break;
             case "diff":
                 return $this->parseDiffOutput($output, $arguments);
-                break;
             case "status":
                 return $this->parseStatusOutput($output, $arguments);
-                break;
         }
 
         return $output;

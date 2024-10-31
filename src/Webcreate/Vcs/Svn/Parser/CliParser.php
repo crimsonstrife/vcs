@@ -52,27 +52,27 @@ class CliParser implements ParserInterface
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Webcreate\Vcs\Common\Parser.ParserInterface::parse()
+     * Parses the output of a given SVN command.
+     *
+     * @param string $command The SVN command to parse.
+     * @param array $arguments The arguments passed to the SVN command.
+     * @param string $output The output from the SVN command.
+     * @return array The parsed result.
      */
-    public function parse($command, array $arguments = array(), $output)
+    public function parse($command, array $arguments = array(), $output = null)
     {
         switch ($command) {
             case "status":
                 return $this->parseStatusOutput($output);
-                break;
             case "list":
                 return $this->parseListOutput($output, $arguments);
-                break;
             case "log":
                 return $this->parseLogOutput($output, $arguments);
-                break;
             case "diff":
                 return $this->parseDiffOutput($output, $arguments);
-                break;
         }
 
-        return $output;
+        return array('output' => $output);
     }
 
     /**
@@ -114,7 +114,7 @@ class CliParser implements ParserInterface
     {
         if (!isset($arguments['--xml']) || false === $arguments['--xml']) {
             // non xml results are not supported
-            return $output;
+            return array('output' => $output);
         }
 
         $head = $this->getClient()->getHead();
@@ -151,7 +151,7 @@ class CliParser implements ParserInterface
     {
         if (!isset($arguments['--xml']) || false === $arguments['--xml']) {
             // non xml results are not supported
-            return $output;
+            return array('output' => $output);
         }
 
         $sxml = simplexml_load_string($output);
@@ -180,12 +180,12 @@ class CliParser implements ParserInterface
     {
         if (!isset($arguments['--xml']) || false === $arguments['--xml']) {
             // non xml results are not supported
-            return $output;
+            return array('output' => $output);
         }
 
         if (!isset($arguments['--summarize']) || false === $arguments['--summarize']) {
             // non summarized results are not supported
-            return $output;
+            return array('output' => $output);
         }
 
         $sxml = simplexml_load_string($output);

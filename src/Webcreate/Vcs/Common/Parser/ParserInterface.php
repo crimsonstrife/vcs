@@ -23,7 +23,7 @@ interface ParserInterface
      * @param array  $arguments arguments for the command
      * @param string $output    output of the command
      */
-    public function parse($command, array $arguments = array(), $output);
+    public function parse($command, array $arguments = array(), $output = null);
 
     /**
      * Informs the parser about the client
