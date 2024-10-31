@@ -7,7 +7,7 @@
 
 namespace Webcreate\Vcs\Common\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Generic VCS event

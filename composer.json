@@ -27,7 +27,8 @@
         "symfony/process": "^7.1",
         "symfony/finder": "^4.4.44",
         "symfony/filesystem": "^4.4.42",
-        "webcreate/util": "1.0.3"
+        "webcreate/util": "1.0.3",
+        "symfony/event-dispatcher": "^7.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^11.4.3"
