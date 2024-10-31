@@ -7,26 +7,43 @@
 
 use Webcreate\Vcs\Svn;
 use Webcreate\Vcs\Svn\Adapter\CliAdapter;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 require_once __DIR__ . "/Test/Util/xsprintf.php";
 
-class SvnTest extends PHPUnit_Framework_TestCase
+class SvnTest extends TestCase
 {
-    public function setUp()
+    private $username;
+    private $password;
+    private $url;
+    private $bin;
+    private $parser;
+    private $cli;
+    private $adapter;
+    private $svn;
+
+    public function setUp(): void
     {
         $this->username = 'user';
         $this->password = 'userpass';
         $this->url = 'svn://svnserver/repository';
         $this->bin = '/usr/local/bin/svn';
 
-        $this->parser = $this->getMock('Webcreate\\Vcs\\Svn\\Parser\\CliParser', null);
-        $this->cli = $this->getMock('Webcreate\\Util\\Cli', array('execute', 'getOutput', 'getErrorOutput'));
-        $this->adapter = $this->getMock('Webcreate\\Vcs\Common\\Adapter\\CliAdapter', null, array($this->bin, $this->cli, $this->parser));
+        $this->parser = $this->getMockBuilder('Webcreate\\Vcs\\Svn\\Parser\\CliParser')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->cli = $this->getMockBuilder('Webcreate\\Util\\Cli')
+            ->onlyMethods(array('execute', 'getOutput', 'getErrorOutput'))
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->adapter = $this->getMockBuilder('Webcreate\\Vcs\\Common\\Adapter\\CliAdapter')
+            ->setConstructorArgs(array($this->bin, $this->cli, $this->parser))
+            ->getMock();
         $this->svn = $this->getMockBuilder('Webcreate\\Vcs\\Svn')
             ->setConstructorArgs(array($this->url, $this->adapter))
-            ->setMethods(null)
+            ->addMethods([])
         ;
     }
 
@@ -86,7 +103,10 @@ class SvnTest extends PHPUnit_Framework_TestCase
 
         // disable the parsing
         $this->adapter->setParser(
-            $this->getMock('Webcreate\\Vcs\\Svn\\Parser\\CliParser', array('parse'))
+            $this->getMockBuilder('Webcreate\\Vcs\\Svn\\Parser\\CliParser')
+                ->onlyMethods(array('parse'))
+                ->disableOriginalConstructor()
+                ->getMock()
         );
 
         $result = $svn->status();
@@ -113,7 +133,10 @@ class SvnTest extends PHPUnit_Framework_TestCase
 
         // disable the parsing
         $this->adapter->setParser(
-            $this->getMock('Webcreate\\Vcs\\Svn\\Parser\\CliParser', array('parse'))
+            $this->getMockBuilder('Webcreate\\Vcs\\Svn\\Parser\\CliParser')
+                ->onlyMethods(array('parse'))
+                ->disableOriginalConstructor()
+                ->getMock()
         );
 
         $result = $svn->ls($path);
@@ -133,7 +156,7 @@ class SvnTest extends PHPUnit_Framework_TestCase
 
         $result = $svn->ls('/path/to/test');
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertCount(3, $result);
     }
 
@@ -194,7 +217,10 @@ class SvnTest extends PHPUnit_Framework_TestCase
 
         // disable the parsing
         $this->adapter->setParser(
-            $this->getMock('Webcreate\\Vcs\\Svn\\Parser\\CliParser', array('parse'))
+            $this->getMockBuilder('Webcreate\\Vcs\\Svn\\Parser\\CliParser')
+                ->onlyMethods(array('parse'))
+                ->disableOriginalConstructor()
+                ->getMock()
         );
 
         $result = $svn->log($path, $revision, $limit);
@@ -214,7 +240,7 @@ class SvnTest extends PHPUnit_Framework_TestCase
 
         $result = $svn->log('/path/to/test');
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertCount(2, $result);
         $this->assertContainsOnlyInstancesOf('Webcreate\\Vcs\\Common\\Commit', $result);
     }
@@ -318,7 +344,10 @@ class SvnTest extends PHPUnit_Framework_TestCase
 
         // disable the parsing
         $this->adapter->setParser(
-            $this->getMock('Webcreate\\Vcs\\Svn\\Parser\\CliParser', array('parse'))
+            $this->getMockBuilder('Webcreate\\Vcs\\Svn\\Parser\\CliParser')
+                ->onlyMethods(array('parse'))
+                ->disableOriginalConstructor()
+                ->getMock()
         );
 
         $result = $svn->diff('/', '', 2, 100, true);
@@ -338,7 +367,7 @@ class SvnTest extends PHPUnit_Framework_TestCase
 
         $result = $svn->diff('/trunk', '/trunk', 2, 100, true);
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertCount(7, $result);
     }
 }

@@ -8,15 +8,26 @@
 use Webcreate\Vcs\Common\VcsFileInfo;
 use Webcreate\Vcs\Common\Reference;
 use Webcreate\Vcs\Common\Commit;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\ProcessUtils;
 use Webcreate\Vcs\Git;
 
 require_once __DIR__ . "/Test/Util/xsprintf.php";
 
-class GitTest extends \PHPUnit_Framework_TestCase
+class GitTest extends TestCase
 {
-    public function setUp()
+    private $username;
+    private $password;
+    private $url;
+    private $bin;
+    private $tmpdir;
+    private $parser;
+    private $cli;
+    private $adapter;
+    private $git;
+
+    public function setUp(): void
     {
         $this->username = 'user';
         $this->password = 'userpass';
@@ -24,12 +35,18 @@ class GitTest extends \PHPUnit_Framework_TestCase
         $this->bin = '/usr/local/bin/git';
         $this->tmpdir = sys_get_temp_dir() . '/' . uniqid(time());
 
-        $this->parser = $this->getMock('Webcreate\\Vcs\\Git\\Parser\\CliParser', null);
-        $this->cli = $this->getMock('Webcreate\\Util\\Cli', array('execute', 'getOutput', 'getErrorOutput'));
-        $this->adapter = $this->getMock('Webcreate\\Vcs\Common\\Adapter\\CliAdapter', null, array($this->bin, $this->cli, $this->parser));
+        $this->parser = $this->getMockBuilder('Webcreate\\Vcs\\Git\\Parser\\CliParser')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->cli = $this->getMockBuilder('Webcreate\\Util\\Cli')
+            ->onlyMethods(array('execute', 'getOutput', 'getErrorOutput'))
+            ->getMock();
+        $this->adapter = $this->getMockBuilder('Webcreate\\Vcs\\Common\\Adapter\\CliAdapter')
+            ->setConstructorArgs(array($this->bin, $this->cli, $this->parser))
+            ->getMock();
         $this->git = $this->getMockBuilder('Webcreate\\Vcs\\Git')
             ->setConstructorArgs(array($this->url, $this->adapter, $this->tmpdir))
-            ->setMethods(null)
+            ->onlyMethods([])
         ;
     }
 
@@ -40,7 +57,7 @@ class GitTest extends \PHPUnit_Framework_TestCase
         $tmpdir = $this->tmpdir;
 
         $this->cli
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('execute')
             ->with($expected)
             ->will($this->returnCallback(function () use ($tmpdir) {
@@ -49,13 +66,13 @@ class GitTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        $result = $this->git->getMock()->checkout($this->tmpdir);
+        $this->git->getMock()->checkout($this->tmpdir);
     }
 
     public function testLsListsFilesFromCheckout()
     {
         $git = $this->git
-            ->setMethods(array('log'))
+            ->onlyMethods(array('log'))
             ->getMock()
         ;
 
@@ -68,7 +85,10 @@ class GitTest extends \PHPUnit_Framework_TestCase
         $tmpdir = $this->tmpdir;
 
         $this->cli
-            ->expects($this->at(0))
+            ->expects($this->exactly(1))
+            ->with(
+                xsprintf('%s clone -b %xs %xs %xs', $this->bin, 'master', $this->url, $this->tmpdir)
+            )
             ->method('execute')
             ->with(xsprintf('%s clone -b %xs %xs %xs', $this->bin, 'master', $this->url, $this->tmpdir))
             ->will($this->returnCallback(function () use ($tmpdir) {
@@ -93,10 +113,15 @@ class GitTest extends \PHPUnit_Framework_TestCase
      */
     public function testLogCommandline($path, $revision, $limit, $expected)
     {
-        $this->git->setMethods(array('checkout'));
+        $this->git->onlyMethods(array('checkout'));
         $this->cli
-            ->expects($this->at(2))
-            ->method('execute')
+            ->expects($this->exactly(3))
+            ->with(
+                $this->equalTo(xsprintf('%s clone -b %xs %xs %xs', $this->bin, 'master', $this->url, $this->tmpdir)),
+                $this->equalTo(xsprintf('%s log -n %xs --pretty=%s %xs', $this->bin, '10', escapeshellarg(Git::PRETTY_FORMAT), '/dir1')),
+                $this->equalTo(xsprintf('%s log --pretty=%s %xs', $this->bin, escapeshellarg(Git::PRETTY_FORMAT), '/dir1'))
+)
+->method('execute')
             ->with($this->equalTo($expected))
         ;
 
@@ -133,7 +158,7 @@ class GitTest extends \PHPUnit_Framework_TestCase
         $tmpdir = $this->tmpdir;
 
         $this->cli
-            ->expects($this->at(0))
+            ->expects($this->exactly(1))
             ->method('execute')
             ->with(xsprintf('%s clone -b %xs %xs %xs', $this->bin, 'master', $this->url, $this->tmpdir))
             ->will($this->returnCallback(function () use ($tmpdir) {
@@ -150,7 +175,7 @@ class GitTest extends \PHPUnit_Framework_TestCase
     public function testImport()
     {
         $git = $this->git
-            ->setMethods(array('add', 'commit', 'checkout'))
+            ->onlyMethods(array('add', 'commit', 'checkout'))
             ->getMock()
         ;
 
@@ -169,10 +194,10 @@ class GitTest extends \PHPUnit_Framework_TestCase
             ->method('add')
         ;
 
-        $result = $git->import(__DIR__ . '/Test/Fixtures', '/dir1', 'test importing');
+        $git->import(__DIR__ . '/Test/Fixtures', '/dir1', 'test importing');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $filesystem = new Filesystem();
         $filesystem->remove($this->tmpdir);
