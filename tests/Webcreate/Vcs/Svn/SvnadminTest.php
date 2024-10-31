@@ -6,20 +6,25 @@
  */
 
 use Webcreate\Util\Cli;
+use PHPUnit\Framework\TestCase;
 use Webcreate\Vcs\Svn\Svnadmin;
 
 require_once __DIR__ . "/../Test/Util/xsprintf.php";
 
-class SvnadminTest extends PHPUnit_Framework_TestCase
+class SvnadminTest extends TestCase
 {
-    public function setUp()
+    private $svndir;
+
+    public function setUp(): void
     {
         $this->svndir = sys_get_temp_dir();
     }
 
     public function testCreate()
     {
-        $cli = $this->getMock('Webcreate\\Util\\Cli', array('execute', 'getOutput', 'getErrorOutput'));
+        $cli = $this->getMockBuilder('Webcreate\\Util\\Cli')
+                    ->onlyMethods(['execute', 'getOutput', 'getErrorOutput'])
+                    ->getMock();
         $cli
             ->expects($this->once())
             ->method('execute')

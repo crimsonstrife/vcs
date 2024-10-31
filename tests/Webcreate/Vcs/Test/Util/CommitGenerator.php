@@ -16,6 +16,8 @@ class CommitGenerator
         'workd.md'
     );
 
+    private $client;
+
     public function __construct(VcsInterface $client)
     {
         $this->client = $client;
@@ -31,7 +33,7 @@ class CommitGenerator
             $filename = array_rand(self::$filenameStubs);
 
             $tmpfile = $checkoutDir . '/' . $filename;
-            file_put_contents($tmpfile, uniqid(null, true));
+            file_put_contents($tmpfile, uniqid('', true));
 
             // added to the staged file list
             $this->client->add($filename);

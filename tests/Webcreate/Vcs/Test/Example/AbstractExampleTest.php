@@ -7,14 +7,16 @@
 
 namespace Webcreate\Vcs\Test\Example;
 
-abstract class AbstractExampleTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+abstract class AbstractExampleTest extends TestCase
 {
     protected $snippetFile;
 
     abstract protected function getSourceFilename();
     abstract protected function getSnippetId();
 
-    public function setUp()
+    public function setUp(): void
     {
         $file = $this->getSourceFilename();
         $id   = $this->getSnippetId();
@@ -44,7 +46,7 @@ abstract class AbstractExampleTest extends \PHPUnit_Framework_TestCase
         return $php;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (file_exists($this->snippetFile)) {
             unlink($this->snippetFile);
