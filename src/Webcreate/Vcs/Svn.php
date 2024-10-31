@@ -58,7 +58,10 @@ class Svn extends AbstractSvn implements VcsInterface
             throw new \RuntimeException('Working copy not initialized, have you tried checkout()?');
         }
 
-        return $this->wc->add($path);
+        $addedFiles = $this->wc->add($path);
+        return implode(', ', array_map(function($fileInfo) {
+            return $fileInfo->getFilename();
+        }, $addedFiles));
     }
 
     /**
@@ -187,7 +190,8 @@ class Svn extends AbstractSvn implements VcsInterface
      */
     public function branches()
     {
-        $result = $this->execute('list', array('--xml' => true, $this->getUrl() . '/' . $this->basePaths['branches']));
+        $resultXml = $this->execute('list', array('--xml' => true, $this->getUrl() . '/' . $this->basePaths['branches']));
+        $result = simplexml_load_string($resultXml);
 
         $logTrunk = $this->log('/', null, 1);
         $logTrunk = reset($logTrunk);
@@ -195,7 +199,7 @@ class Svn extends AbstractSvn implements VcsInterface
         $branches = array();
         $branches[] = new Reference('trunk', Reference::BRANCH, $logTrunk->getRevision());
 
-        foreach ($result as $fileinfo) {
+        foreach ($result->list->entry as $fileinfo) {
             $branches[] = new Reference($fileinfo->getFilename(), Reference::BRANCH, $fileinfo->getCommit()->getRevision());
         }
 
@@ -208,10 +212,11 @@ class Svn extends AbstractSvn implements VcsInterface
      */
     public function tags()
     {
-        $result = $this->execute('list', array('--xml' => true, $this->getUrl() . '/' . $this->basePaths['tags']));
+        $resultXml = $this->execute('list', array('--xml' => true, $this->getUrl() . '/' . $this->basePaths['tags']));
+        $result = simplexml_load_string($resultXml);
 
         $tags = array();
-        foreach ($result as $fileinfo) {
+        foreach ($result->list->entry as $fileinfo) {
             $tags[] = new Reference($fileinfo->getFilename(), Reference::TAG, $fileinfo->getCommit()->getRevision());
         }
 

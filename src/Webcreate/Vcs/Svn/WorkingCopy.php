@@ -70,9 +70,27 @@ class WorkingCopy
 
         foreach ($result as $fileInfo) {
             if ($fileInfo->getStatus() === Status::UNVERSIONED) {
-                $this->svn->execute('add', array($fileInfo->getPathname()), $this->cwd);
+                $added = $this->svn->execute('add', array($fileInfo->getPathname()), $this->cwd);
+
+                // if the file is added, we need to remove it from the status list
+                if (false !== strpos($added, 'A')) {
+                    unset($result[$fileInfo->getPathname()]);
+
+                    continue;
+                }
+
+                // if the file is already under version control, we need to remove it from the status list
+                if (false !== strpos($added, 'svn: warning:')) {
+                    unset($result[$fileInfo->getPathname()]);
+
+                    continue;
+                }
+
+                throw new \RuntimeException(sprintf('Could not add %s to version control', $fileInfo->getPathname()));
             }
         }
+
+        return $result;
     }
 
     /**
@@ -99,6 +117,16 @@ class WorkingCopy
             $args[] = $path;
         }
 
-        return $this->svn->execute('status', $args, $this->cwd);
+        $statusOutput = $this->svn->execute('status', $args, $this->cwd);
+        $statusLines = explode("\n", trim($statusOutput));
+        $fileInfos = array();
+
+        foreach ($statusLines as $line) {
+            if (!empty($line)) {
+                $fileInfos[] = new \Webcreate\Vcs\Common\VcsFileInfo($line, array('cwd' => $this->cwd));
+            }
+        }
+
+        return $fileInfos;
     }
 }

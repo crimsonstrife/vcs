@@ -25,9 +25,9 @@
     },
     "require": {
         "symfony/process": "^7.1",
-        "symfony/finder": "^4.4.44",
-        "symfony/filesystem": "^4.4.42",
-        "webcreate/util": "1.0.3",
+        "symfony/finder": "^7.1",
+        "symfony/filesystem": "^7.1.6",
+        "webcreate/util": "^1.0.3",
         "symfony/event-dispatcher": "^7.1"
     },
     "require-dev": {
