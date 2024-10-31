@@ -89,7 +89,7 @@ abstract class AbstractGit extends AbstractClient
 
             // ensure the working directory exists (needed on windows)
             if (!is_dir($this->cwd)) {
-                mkdir($this->cwd);
+                mkdir($this->cwd, 0755, true); // Update the mode to 0755
             }
 
             $this->isTemporary = true;
@@ -112,6 +112,8 @@ abstract class AbstractGit extends AbstractClient
         // branch might have changed, so if we had a checkout it could be out of sync
         // setting this to false will get it back in sync
         $this->hasCheckout = false;
+
+        return $this;
     }
 
     /**
