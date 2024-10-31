@@ -8,6 +8,7 @@
 namespace Webcreate\Vcs\Test\Util;
 
 use Symfony\Component\Process\Process;
+use PHPUnit\Framework\SkippedTestError;
 
 class GitReposGenerator
 {
@@ -38,9 +39,9 @@ class GitReposGenerator
         );
 
         foreach($commandlist as $commandline) {
-            $process = new Process($commandline);
+            $process = Process::fromShellCommandline($commandline);
             if ($process->run() <> 0) {
-                throw new \PHPUnit_Framework_SkippedTestError('Error: ' . $process->getErrorOutput());
+                throw new SkippedTestError('Error: ' . $process->getErrorOutput());
             }
         }
         return array($reposdir, $wcdir);

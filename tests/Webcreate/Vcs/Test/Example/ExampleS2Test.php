@@ -17,6 +17,10 @@ use Symfony\Component\Process\Process;
  */
 class ExampleS2Test extends AbstractExampleTest
 {
+    private $tmpdir;
+    private $svndir;
+    private $wcdir;
+
     protected function getSourceFilename()
     {
         return __DIR__ . '/../../../../../docs/03-subversion.md';
@@ -27,7 +31,7 @@ class ExampleS2Test extends AbstractExampleTest
         return 'Example S2';
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->tmpdir = sys_get_temp_dir() . '/' . uniqid('wbcrte-svn-');
 
@@ -45,7 +49,7 @@ class ExampleS2Test extends AbstractExampleTest
         return $php;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

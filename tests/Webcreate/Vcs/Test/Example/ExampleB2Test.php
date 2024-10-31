@@ -18,6 +18,10 @@ use Symfony\Component\Process\Process;
  */
 class ExampleB2Test extends AbstractExampleTest
 {
+    private $tmpdir;
+    private $vcsdir;
+    private $wcdir;
+
     protected function getSourceFilename()
     {
         return __DIR__ . '/../../../../../docs/01-basic-usage.md';
@@ -28,7 +32,7 @@ class ExampleB2Test extends AbstractExampleTest
         return 'Example B2';
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->tmpdir = sys_get_temp_dir() . '/' . uniqid('wbcrte-git-');
 
@@ -46,7 +50,7 @@ class ExampleB2Test extends AbstractExampleTest
         return $php;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

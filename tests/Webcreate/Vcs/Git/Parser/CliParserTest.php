@@ -1,19 +1,23 @@
 <?php
 
-namespace Test\Webcreate\Vcs\Git\Parser;
+namespace Webcreate\Vcs\Git\Parser;
 
-use Webcreate\Vcs\Git\Parser\CliParser;
+use PHPUnit\Framework\TestCase;
 
-class CliParserTest extends \PHPUnit_Framework_TestCase
+class CliParserTest extends TestCase
 {
+    private $prophet;
+
     /**
      * @var CliParser
      */
     private $parser;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $client = $this->prophesize('Webcreate\Vcs\Git');
+        $this->prophet = new \Prophecy\Prophet;
+
+        $client = $this->prophet->prophesize('Webcreate\Vcs\Git\Client');
 
         $this->parser = new CliParser();
         $this->parser->setClient(
