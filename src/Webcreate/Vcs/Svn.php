@@ -59,7 +59,7 @@ class Svn extends AbstractSvn implements VcsInterface
         }
 
         $addedFiles = $this->wc->add($path);
-        return implode(', ', array_map(function($fileInfo) {
+        return implode(', ', array_map(function ($fileInfo) {
             return $fileInfo->getFilename();
         }, $addedFiles));
     }
