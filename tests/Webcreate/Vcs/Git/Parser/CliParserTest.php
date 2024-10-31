@@ -15,7 +15,7 @@ class CliParserTest extends TestCase
 
     public function setUp(): void
     {
-        $this->prophet = new \Prophecy\Prophet;
+        $this->prophet = new \Prophecy\Prophet();
 
         $client = $this->prophet->prophesize('Webcreate\Vcs\Git\Client');
 
