@@ -278,7 +278,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $branches = $this->client->branches();
 
-        $branchNames = array_map(function($ref) {
+        $branchNames = array_map(function ($ref) {
             return $ref->getName();
         }, $branches);
 
@@ -301,7 +301,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
 
     public function testRevisionCompare()
     {
-        list ($newerRevision, $olderRevision) = $this->existingRevisionProvider();
+        list($newerRevision, $olderRevision) = $this->existingRevisionProvider();
 
         $this->assertEquals(1, $this->client->revisionCompare($newerRevision, $olderRevision));
         $this->assertEquals(0, $this->client->revisionCompare($olderRevision, $olderRevision));

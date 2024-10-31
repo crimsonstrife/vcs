@@ -27,15 +27,14 @@ abstract class AbstractExampleTest extends \PHPUnit_Framework_TestCase
         $contents = file_get_contents($file);
 
         if (preg_match('/``` php\n\/\/ '.preg_quote($id, '/').'([^`]+)```/s', $contents, $matches)) {
-            list(,$php) = $matches;
+            list(, $php) = $matches;
 
             $php = "<?php\n" . $php;
             $php = $this->processSnippet($php);
 
             $this->snippetFile = tempnam(sys_get_temp_dir(), 'example');
             file_put_contents($this->snippetFile, $php);
-        }
-        else {
+        } else {
             $this->markTestIncomplete(sprintf('Unable to extract snippet from %s', $file));
         }
     }

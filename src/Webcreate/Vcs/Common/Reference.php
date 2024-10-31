@@ -9,8 +9,8 @@ namespace Webcreate\Vcs\Common;
 
 class Reference
 {
-    const BRANCH = 'branch';
-    const TAG    = 'tag';
+    public const BRANCH = 'branch';
+    public const TAG    = 'tag';
 
     protected $name;
     protected $type;

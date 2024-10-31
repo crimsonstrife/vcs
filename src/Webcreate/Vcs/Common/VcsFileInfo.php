@@ -9,11 +9,11 @@ namespace Webcreate\Vcs\Common;
 
 class VcsFileInfo
 {
-    const BRANCH = 'branch';
-    const TAG    = 'tag';
+    public const BRANCH = 'branch';
+    public const TAG    = 'tag';
 
-    const FILE = 'file';
-    const DIR  = 'dir';
+    public const FILE = 'file';
+    public const DIR  = 'dir';
 
     protected $filename;
     protected $kind;

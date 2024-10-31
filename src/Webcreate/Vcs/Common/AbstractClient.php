@@ -131,7 +131,7 @@ abstract class AbstractClient
         if ($reference instanceof Reference) {
             $this->head = $reference;
         } elseif (is_array($reference)) {
-            list ($name, $type) = $reference;
+            list($name, $type) = $reference;
             $this->head = new Reference($name, $type);
         }
 

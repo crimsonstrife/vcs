@@ -113,7 +113,7 @@ class SvnTest extends PHPUnit_Framework_TestCase
 
         // disable the parsing
         $this->adapter->setParser(
-                $this->getMock('Webcreate\\Vcs\\Svn\\Parser\\CliParser', array('parse'))
+            $this->getMock('Webcreate\\Vcs\\Svn\\Parser\\CliParser', array('parse'))
         );
 
         $result = $svn->ls($path);
@@ -157,17 +157,19 @@ class SvnTest extends PHPUnit_Framework_TestCase
         $this->setUp();
 
         return array(
-            array('path/to/import', '/', 'Importing stuff', xsprintf("%s import %xs %xs -m %xs --non-interactive",
-                    $this->bin,
-                    'path/to/import',
-                    $this->url . '/trunk',
-                    'Importing stuff'
+            array('path/to/import', '/', 'Importing stuff', xsprintf(
+                "%s import %xs %xs -m %xs --non-interactive",
+                $this->bin,
+                'path/to/import',
+                $this->url . '/trunk',
+                'Importing stuff'
             )),
-            array('path/to/import', '', 'Importing stuff', xsprintf("%s import %xs %xs -m %xs --non-interactive",
-                    $this->bin,
-                    'path/to/import',
-                    $this->url . '/trunk',
-                    'Importing stuff'
+            array('path/to/import', '', 'Importing stuff', xsprintf(
+                "%s import %xs %xs -m %xs --non-interactive",
+                $this->bin,
+                'path/to/import',
+                $this->url . '/trunk',
+                'Importing stuff'
             ))
         );
     }
@@ -192,7 +194,7 @@ class SvnTest extends PHPUnit_Framework_TestCase
 
         // disable the parsing
         $this->adapter->setParser(
-                $this->getMock('Webcreate\\Vcs\\Svn\\Parser\\CliParser', array('parse'))
+            $this->getMock('Webcreate\\Vcs\\Svn\\Parser\\CliParser', array('parse'))
         );
 
         $result = $svn->log($path, $revision, $limit);
@@ -226,36 +228,39 @@ class SvnTest extends PHPUnit_Framework_TestCase
                 $path = '/',
                 null,
                 null,
-                xsprintf("%s log --xml %xs --non-interactive --username %xs --password %xs",
-                        $this->bin,
-                        $this->url . '/trunk',
-                        $this->username,
-                        $this->password
+                xsprintf(
+                    "%s log --xml %xs --non-interactive --username %xs --password %xs",
+                    $this->bin,
+                    $this->url . '/trunk',
+                    $this->username,
+                    $this->password
                 )
             ),
             array(
                 $path = '',
                 '1234',
                 null,
-                xsprintf("%s log -r %xs --xml %xs --non-interactive --username %xs --password %xs",
-                        $this->bin,
-                        '1234',
-                        $this->url . '/trunk',
-                        $this->username,
-                        $this->password
+                xsprintf(
+                    "%s log -r %xs --xml %xs --non-interactive --username %xs --password %xs",
+                    $this->bin,
+                    '1234',
+                    $this->url . '/trunk',
+                    $this->username,
+                    $this->password
                 )
             ),
             array(
                 $path = '/test',
                 '1234',
                 2,
-                xsprintf("%s log -r %xs --limit %xs --xml %xs --non-interactive --username %xs --password %xs",
-                        $this->bin,
-                        '1234',
-                        '2',
-                        $this->url . '/trunk' . $path,
-                        $this->username,
-                        $this->password
+                xsprintf(
+                    "%s log -r %xs --limit %xs --xml %xs --non-interactive --username %xs --password %xs",
+                    $this->bin,
+                    '1234',
+                    '2',
+                    $this->url . '/trunk' . $path,
+                    $this->username,
+                    $this->password
                 )
             ),
         );
@@ -269,11 +274,12 @@ class SvnTest extends PHPUnit_Framework_TestCase
         ;
         $svn->setCredentials($this->username, $this->password);
 
-        $expected = xsprintf("%s cat %xs --non-interactive --username %xs --password %xs",
-                $this->bin,
-                $this->url . '/trunk/test',
-                $this->username,
-                $this->password
+        $expected = xsprintf(
+            "%s cat %xs --non-interactive --username %xs --password %xs",
+            $this->bin,
+            $this->url . '/trunk/test',
+            $this->username,
+            $this->password
         );
 
         $this->cli
@@ -294,12 +300,13 @@ class SvnTest extends PHPUnit_Framework_TestCase
         ;
         $svn->setCredentials($this->username, $this->password);
 
-        $expected = xsprintf("%s diff %xs %xs --summarize --xml --non-interactive --username %xs --password %xs",
-                $this->bin,
-                $this->url . '/trunk@2',
-                $this->url . '/trunk@100',
-                $this->username,
-                $this->password
+        $expected = xsprintf(
+            "%s diff %xs %xs --summarize --xml --non-interactive --username %xs --password %xs",
+            $this->bin,
+            $this->url . '/trunk@2',
+            $this->url . '/trunk@100',
+            $this->username,
+            $this->password
         );
 
         $this->cli
@@ -311,7 +318,7 @@ class SvnTest extends PHPUnit_Framework_TestCase
 
         // disable the parsing
         $this->adapter->setParser(
-                $this->getMock('Webcreate\\Vcs\\Svn\\Parser\\CliParser', array('parse'))
+            $this->getMock('Webcreate\\Vcs\\Svn\\Parser\\CliParser', array('parse'))
         );
 
         $result = $svn->diff('/', '', 2, 100, true);
