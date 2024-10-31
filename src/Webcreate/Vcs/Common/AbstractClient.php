@@ -82,11 +82,12 @@ abstract class AbstractClient
     }
 
     /**
-     * @param mixed $dispatcher
+     * @param EventDispatcherInterface $dispatcher
      */
     public function setDispatcher(EventDispatcherInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;
+        return $this;
     }
 
     /**
@@ -166,6 +167,6 @@ abstract class AbstractClient
 
         $event = new VcsEvent($data);
 
-        $this->dispatcher->dispatch($eventName, $event);
+        $this->dispatcher->dispatch($event, $eventName);
     }
 }

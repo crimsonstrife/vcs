@@ -72,7 +72,7 @@ class CliAdapter implements AdapterInterface
     /**
      * Returns VCS client
      *
-     * @return Webcreate\Vcs\Common\AbstractClient
+     * @return AbstractClient
      */
     public function getClient()
     {
@@ -189,7 +189,7 @@ class CliAdapter implements AdapterInterface
      * @param  string $output
      * @return mixed
      */
-    protected function parse($command, array $arguments = array(), $output)
+    protected function parse($command, array $arguments = array(), $output = null)
     {
         if (null !== $this->parser) {
             return $this->parser->parse($command, $arguments, $output);
