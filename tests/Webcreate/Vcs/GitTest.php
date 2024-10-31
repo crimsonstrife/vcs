@@ -120,7 +120,7 @@ class GitTest extends TestCase
                 $this->equalTo(xsprintf('%s clone -b %xs %xs %xs', $this->bin, 'master', $this->url, $this->tmpdir)),
                 $this->equalTo(xsprintf('%s log -n %xs --pretty=%s %xs', $this->bin, '10', escapeshellarg(Git::PRETTY_FORMAT), '/dir1')),
                 $this->equalTo(xsprintf('%s log --pretty=%s %xs', $this->bin, escapeshellarg(Git::PRETTY_FORMAT), '/dir1'))
-)
+            )
 ->method('execute')
             ->with($this->equalTo($expected))
         ;
