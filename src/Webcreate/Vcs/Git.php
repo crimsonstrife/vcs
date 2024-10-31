@@ -30,7 +30,7 @@ use Webcreate\Vcs\VcsInterface;
  */
 class Git extends AbstractGit implements VcsInterface
 {
-    const PRETTY_FORMAT = '<logentry><commit>%H</commit>%n<date>%aD</date>%n<author>%an</author>%n<msg><![CDATA[%B]]></msg></logentry>';
+    public const PRETTY_FORMAT = '<logentry><commit>%H</commit>%n<date>%aD</date>%n<author>%an</author>%n<msg><![CDATA[%B]]></msg></logentry>';
 
     /**
      * @var array remote tags cache
@@ -241,7 +241,9 @@ class Git extends AbstractGit implements VcsInterface
             $path = '.';
         }
 
-        return $this->execute('log', array(
+        return $this->execute(
+            'log',
+            array(
 //                 '-r' => $revision ? $revision : false,
                 '-n' => $limit ? $limit : false,
                 '--pretty=' => self::PRETTY_FORMAT,
@@ -257,7 +259,9 @@ class Git extends AbstractGit implements VcsInterface
     {
         $this->fetch();
 
-        return $this->execute('log', array(
+        return $this->execute(
+            'log',
+            array(
                 '--pretty=' => self::PRETTY_FORMAT,
                 sprintf('%s^1..%s', $revision1, $revision2),
             )
@@ -289,9 +293,13 @@ class Git extends AbstractGit implements VcsInterface
      *     The command "/usr/local/bin/git diff --name-status '981abd298692d2ae531a904dbdab774589e05e3f' '981abd298692d2ae531a904dbdab774589e05e3f' 'master' 'refactor'" failed.
      *     usage: git diff [--no-index] <path> <path>
      */
-    public function diff($oldPath, $newPath, $oldRevision = 'HEAD',
-        $newRevision = 'HEAD', $summary = true)
-    {
+    public function diff(
+        $oldPath,
+        $newPath,
+        $oldRevision = 'HEAD',
+        $newRevision = 'HEAD',
+        $summary = true
+    ) {
         $this->fetch();
 
         $arguments = array(
@@ -327,7 +335,7 @@ class Git extends AbstractGit implements VcsInterface
 
             $branches = array();
             foreach ($list as $line) {
-                list ($hash, $ref) = explode("\t", $line);
+                list($hash, $ref) = explode("\t", $line);
                 $branches[] = new Reference(str_replace('refs/heads/', '', $ref), Reference::BRANCH, $hash);
             }
 
@@ -354,7 +362,7 @@ class Git extends AbstractGit implements VcsInterface
 
             $tags = array();
             foreach ($list as $line) {
-                list ($hash, $ref) = explode("\t", $line);
+                list($hash, $ref) = explode("\t", $line);
                 $tags[] = new Reference(str_replace('refs/tags/', '', $ref), Reference::TAG, $hash);
             }
 

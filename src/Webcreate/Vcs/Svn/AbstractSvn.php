@@ -141,8 +141,12 @@ abstract class AbstractSvn extends AbstractClient
                 '--non-interactive' => true,
         );
 
-        if ($this->username) $args['--username'] = $this->username;
-        if ($this->password) $args['--password'] = $this->password;
+        if ($this->username) {
+            $args['--username'] = $this->username;
+        }
+        if ($this->password) {
+            $args['--password'] = $this->password;
+        }
         return $args;
     }
 
@@ -216,10 +220,10 @@ abstract class AbstractSvn extends AbstractClient
 
         $retval = $this->url;
         if (isset($basePath)) {
-            $retval.= '/' . $basePath;
+            $retval .= '/' . $basePath;
         }
 
-        $retval.= '/' . ltrim($path->getPathname(), '/');
+        $retval .= '/' . ltrim($path->getPathname(), '/');
         $retval = rtrim($retval, '/');
 
         return $retval;
@@ -239,7 +243,8 @@ abstract class AbstractSvn extends AbstractClient
 
         return ($item1['kind'] == 'dir'
                 ? ($item2['kind'] == 'dir' ? strnatcmp($item1['name'], $item2['name']) : -1)
-                : ($item2['kind'] == 'dir' ? 1 : strnatcmp($item1['name'], $item2['name'])
+                : (
+                    $item2['kind'] == 'dir' ? 1 : strnatcmp($item1['name'], $item2['name'])
                 ));
     }
 }

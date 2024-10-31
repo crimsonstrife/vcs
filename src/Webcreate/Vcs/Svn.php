@@ -128,9 +128,11 @@ class Svn extends AbstractSvn implements VcsInterface
      * (non-PHPdoc)
      * @see Webcreate\Vcs.VcsInterface::log()
      */
-    public function log($path, $revision=null, $limit=null)
+    public function log($path, $revision = null, $limit = null)
     {
-        return $this->execute('log', array(
+        return $this->execute(
+            'log',
+            array(
                 '-r' => $revision ? $revision : false,
                 '--limit' => $limit ? $limit : false,
                 '--xml' => true,
@@ -144,7 +146,9 @@ class Svn extends AbstractSvn implements VcsInterface
      */
     public function changelog($revision1, $revision2)
     {
-        return $this->execute('log', array(
+        return $this->execute(
+            'log',
+            array(
                 '-r' => sprintf('%s:%s', $revision2, $revision1),
                 '--xml' => true,
                 $this->getSvnUrl($this->getHead())

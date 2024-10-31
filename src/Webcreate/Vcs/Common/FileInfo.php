@@ -14,8 +14,8 @@ namespace Webcreate\Vcs\Common;
  */
 class FileInfo
 {
-    const DIR  = 'dir';
-    const FILE = 'file';
+    public const DIR  = 'dir';
+    public const FILE = 'file';
 
     protected $name;
     protected $kind;

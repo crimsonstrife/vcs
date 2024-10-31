@@ -43,7 +43,7 @@ class GitTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(0))
             ->method('execute')
             ->with($expected)
-            ->will($this->returnCallback(function() use ($tmpdir) {
+            ->will($this->returnCallback(function () use ($tmpdir) {
                 $filesystem = new Filesystem();
                 $filesystem->mkdir($tmpdir);
             }))
@@ -71,7 +71,7 @@ class GitTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(0))
             ->method('execute')
             ->with(xsprintf('%s clone -b %xs %xs %xs', $this->bin, 'master', $this->url, $this->tmpdir))
-            ->will($this->returnCallback(function() use ($tmpdir) {
+            ->will($this->returnCallback(function () use ($tmpdir) {
                 $filesystem = new Filesystem();
                 $filesystem->mkdir($tmpdir);
                 $filesystem->mirror(__DIR__ . '/Test/Fixtures/skeleton/git', $tmpdir);
@@ -108,16 +108,18 @@ class GitTest extends \PHPUnit_Framework_TestCase
         $this->setUp();
 
         return array(
-                array('/dir1', null, 10, xsprintf('%s log -n %xs --pretty=%s %xs',
-                        $this->bin,
-                        '10',
-                        escapeshellarg(Git::PRETTY_FORMAT),
-                        '/dir1'
+                array('/dir1', null, 10, xsprintf(
+                    '%s log -n %xs --pretty=%s %xs',
+                    $this->bin,
+                    '10',
+                    escapeshellarg(Git::PRETTY_FORMAT),
+                    '/dir1'
                 )),
-                array('/dir1', null, null, xsprintf('%s log --pretty=%s %xs',
-                        $this->bin,
-                        escapeshellarg(Git::PRETTY_FORMAT),
-                        '/dir1'
+                array('/dir1', null, null, xsprintf(
+                    '%s log --pretty=%s %xs',
+                    $this->bin,
+                    escapeshellarg(Git::PRETTY_FORMAT),
+                    '/dir1'
                 )),
         );
     }
@@ -134,7 +136,7 @@ class GitTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(0))
             ->method('execute')
             ->with(xsprintf('%s clone -b %xs %xs %xs', $this->bin, 'master', $this->url, $this->tmpdir))
-            ->will($this->returnCallback(function() use ($tmpdir) {
+            ->will($this->returnCallback(function () use ($tmpdir) {
                 $filesystem = new Filesystem();
                 $filesystem->mkdir($tmpdir);
                 $filesystem->mirror(__DIR__ . '/Test/Fixtures/skeleton/git', $tmpdir);

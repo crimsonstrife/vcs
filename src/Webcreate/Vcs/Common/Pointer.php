@@ -15,8 +15,8 @@ namespace Webcreate\Vcs\Common;
  */
 class Pointer
 {
-    const TYPE_BRANCH = 'branch';
-    const TYPE_TAG    = 'tag';
+    public const TYPE_BRANCH = 'branch';
+    public const TYPE_TAG    = 'tag';
 
     protected $name;
     protected $type;

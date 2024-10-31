@@ -14,9 +14,9 @@ namespace Webcreate\Vcs\Common;
  */
 class Status
 {
-    const MODIFIED    = 'M';
-    const ADDED       = 'A';
-    const UNVERSIONED = '?';
-    const DELETED     = 'D';
-    const UNMODIFIED  = ' ';
+    public const MODIFIED    = 'M';
+    public const ADDED       = 'A';
+    public const UNVERSIONED = '?';
+    public const DELETED     = 'D';
+    public const UNMODIFIED  = ' ';
 }
