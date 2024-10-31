@@ -105,6 +105,12 @@ abstract class AbstractGit extends AbstractClient
         return $this;
     }
 
+    /**
+     * Returns the current working directory
+     *
+     * @param array|Reference $reference
+     * @return AbstractGit
+     */
     public function setHead($reference)
     {
         parent::setHead($reference);
